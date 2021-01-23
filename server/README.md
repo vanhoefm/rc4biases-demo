@@ -39,6 +39,8 @@ And replace `<IP>` with the IP address that is hosting the website. To run the d
 
 ## SSL Configuration
 
+The following is only important when monitoring RC4-encrypted TLS traffic and debugging the dataset capture.
+
 See [https://www.digitalocean.com/community/tutorials/how-to-create-a-ssl-certificate-on-nginx-for-ubuntu-12-04] on how to create SSL keys, and configure nginx to use them.
 
 To create a certificate valid for both `site.com` and `*.site.com` see [http://apetec.com/support/GenerateSAN-CSR.htm].
