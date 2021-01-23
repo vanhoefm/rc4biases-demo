@@ -21,7 +21,7 @@ Now set up a python2 environment
 
 ## Preparing the captured dataset
 
-Instead of monitoring RC4-encrypted traffic yourself, which is very timeconsuming, you can also use our captured dataset. First download [`stats_httpsmon_demo.dat.7z`]() and extract it in the demo directory. You can now view some basic meta-data of this capture:
+Instead of monitoring RC4-encrypted traffic yourself, which is very timeconsuming, you can also use our captured dataset. First download [`stats_httpsmon_demo.dat.7z`](https://github.com/vanhoefm/rc4biases-demo/releases/download/v1/stats_httpsmon_demo.dat.7z) and extract it in the demo directory. You can now view some basic meta-data of this capture:
 
 	cd scripts
 	source venv/bin/activate
