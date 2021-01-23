@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Worker!</title>
+	<style type="text/css">
+	a {
+		font-size: 30px;
+		color: red;
+		background-color: black;
+		padding: 10px;
+		float: left;
+		margin-right: 20px;
+		clear: left;
+	}
+	h2 {
+		float: left;
+	}
+	</style>
+</head>
+<body>
+	<a href="#" id="idp" data-hosts="http://cersv.cs.kuleuven.be:81/204/">Start!</a>
+	<h2>cersv.cs.kuleuven.be</h2>
+	<a href="#" id="idp" data-hosts="http://cersv.cs.kuleuven.be:81/204/,http://cersv.cs.kuleuven.be/">Start!</a>
+	<h2>port 80 &amp; 81</h2>
+	<a href="#" id="idp" data-hosts="http://cersv.cs.kuleuven.be:81/204/,https://idp.kuleuven.be/xxx/">Start!</a>
+	<h2>Helft naar cersv.cs.kuleuven.be, andere helft naar idp.kuleuven.be</h2>
+	<a href="#" id="idp" data-hosts="http://cersv.cs.kuleuven.be:81/204/,http://cserv.cs.kuleuven.be:81/204/">Start!</a>
+	<h2>Helft naar cersv.cs.kuleuven.be, andere helft naar cserv.cs.kuleuven.be (toevoegen aan /etc/hosts)</h2>
+</body>
+<script type="text/javascript">
+[].map.call(document.querySelectorAll('a'), function(el) {
+	el.addEventListener('click', function(e){
+		var hosts = el.getAttribute('data-hosts');
+		run(hosts.split(','));
+		e.preventDefault();
+	});
+});
+function run(hosts) {
+	var hostsLength = hosts.length;
+	var workers = [];
+	for (var i = 0; i < 20; i++) {
+		var w = new Worker('./worker.js');
+		w = new Worker('./worker.js');
+		w.postMessage(hosts[i%hostsLength] + i + '-');
+		console.log(hosts[i%hostsLength]);
+	}	
+}
+</script>
+</html>

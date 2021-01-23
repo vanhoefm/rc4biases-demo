@@ -1,0 +1,12 @@
+GET /dump.php HTTP/1.1
+Accept: */*
+Referer: http://r0b.pw/util.js
+Accept-Language: nl-BE
+Origin: http://r0b.pw
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: a.site.com
+Connection: Keep-Alive
+Cache-Control: no-cache
+Cookie: auth=a156fa8e12c5943e; P=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+

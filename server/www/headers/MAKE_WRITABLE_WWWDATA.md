@@ -1,0 +1,1 @@
+This is the directory where `dump.php` will dump the raw headers used during attacks. Make this directory writable for the user `www-data` (or whatever nginx is using) so we always have the headers used during an attack.
