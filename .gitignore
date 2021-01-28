@@ -1,4 +1,6 @@
 build/
+venv/
+demo/stats_httpsmon_demo.dat
 *.so
 *.pyc
 *.o
