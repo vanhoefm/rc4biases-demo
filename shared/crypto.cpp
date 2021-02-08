@@ -20,7 +20,7 @@
 #if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined (LIBRESSL_VERSION_NUMBER)
 HMAC_CTX *HMAC_CTX_new(void)
 {
-	HMAC_CTX *ctx = OPENSSL_malloc(sizeof(*ctx));
+	HMAC_CTX *ctx = (HMAC_CTX*)OPENSSL_malloc(sizeof(*ctx));
 	if (ctx != NULL)
 		HMAC_CTX_init(ctx);
 	return ctx;
@@ -34,15 +34,15 @@ void HMAC_CTX_free(HMAC_CTX *ctx)
 	}
 }
 
-EVP_CIPHER_CTX_new(void)
+EVP_CIPHER_CTX * EVP_CIPHER_CTX_new(void)
 {
-	EVP_CIPHER_CTX *ctx = OPENSSL_malloc(sizeof(*ctx));
+	EVP_CIPHER_CTX *ctx = (EVP_CIPHER_CTX*)OPENSSL_malloc(sizeof(*ctx));
 	if (ctx != NULL)
 		EVP_CIPHER_CTX_init(ctx);
 	return ctx;
 }
 
-void EVP_CIPHER_CTX_free(HMAC_CTX *ctx)
+void EVP_CIPHER_CTX_free(EVP_CIPHER_CTX *ctx)
 {
 	if (ctx != NULL) {
 		EVP_CIPHER_CTX_cleanup(ctx);

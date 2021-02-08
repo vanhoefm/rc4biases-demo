@@ -17,8 +17,8 @@ enum EncType {
 #if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined (LIBRESSL_VERSION_NUMBER)
 HMAC_CTX *HMAC_CTX_new(void);
 void HMAC_CTX_free(HMAC_CTX *ctx);
-EVP_CIPHER_CTX_new(void);
-void EVP_CIPHER_CTX_free(HMAC_CTX *ctx);
+EVP_CIPHER_CTX *EVP_CIPHER_CTX_new(void);
+void EVP_CIPHER_CTX_free(EVP_CIPHER_CTX *ctx);
 #endif
 
 void hmac_vector(const EVP_MD *hashtype, const uint8_t *key, size_t key_len, size_t num_elem,

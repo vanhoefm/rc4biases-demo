@@ -183,7 +183,7 @@ template<typename T> int findval_sorted(T *array, unsigned int num, T value)
 template<typename T> int indexposition_if_sorted(T *array, size_t num, uint8_t goodindex)
 {
 	// List of (votes, key byte) pairs
-	std::vector<std::pair<T, uint8_t>> vector_array(num);
+	std::vector<std::pair<T, uint8_t> > vector_array(num);
 	for (unsigned i = 0; i < num; ++i)
 		vector_array[i] = std::pair<T, uint8_t>(array[i], i);
 
